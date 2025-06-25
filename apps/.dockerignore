@@ -1,0 +1,8 @@
+.dockerignore
+node_modules/
+coverage/
+testing/
+sonar-project.properties
+package-lock.json
+README.md
+.env
