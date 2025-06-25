@@ -3,11 +3,13 @@ services:
   backend:
     build: ./apps
     restart: always
+    links:
+      - db
     ports:
       - "3000"
     environment:
       - DB_NAME=training
-      - DB_HOST=172.23.14.102
+      - DB_HOST=db
       - DB_USER=peserta
       - DB_PASS=password
       - APP_PORT=3000
@@ -15,13 +17,29 @@ services:
     volumes:
       - app-data:/app/public/images
 
+  db:
+    image: "mariadb"
+    restart: always
+    links:
+      - phpmyadmin
+    ports:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=training
+      - MYSQL_USER=peserta
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./apps/database/:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/mysql
+
   phpmyadmin:
     image: "phpmyadmin"
     restart: always
     ports:
       - "8000:80"
     environment:
-      - PMA_HOST=172.23.14.102
+      - PMA_HOST=db
 
   web:
     build: ./nginx
@@ -33,3 +51,4 @@ services:
 
 volumes:
   app-data:
+  db-data:
