@@ -40,18 +40,5 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
-            steps {
-                sh'''
-                docker compose up --build -d
-                '''
-            }
-        }
-        
-        stage('Backup') {
-            steps {
-                 sh 'docker compose push' 
-            }
-        }
     }
 }
